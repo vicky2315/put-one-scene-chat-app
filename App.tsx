@@ -6,6 +6,9 @@
  */
 
 import React from 'react';
+import { Button } from '@react-navigation/elements';
+import { createStaticNavigation, NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type {PropsWithChildren} from 'react';
 import {
   ScrollView,
@@ -36,7 +39,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
         style={[
           styles.sectionTitle,
           {
-            color: isDarkMode ? Colors.white : Colors.black,
+            color: '#D7EC39',
           },
         ]}>
         {title}
@@ -45,7 +48,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
         style={[
           styles.sectionDescription,
           {
-            color: isDarkMode ? Colors.light : Colors.dark,
+            color: '#D7EC39',
           },
         ]}>
         {children}
@@ -54,60 +57,64 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   );
 }
 
+const Stack = createNativeStackNavigator();
+
+function HomeScreen() {
+  const navigation = useNavigation();
+
+  return (
+    <View style={{ flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    backgroundColor : '#D7EC39' }}>
+
+    <Text style = {styles.headerFont}>Put1Scene</Text>
+    <Button onPress={() => navigation.navigate('Details')}>
+      Go to Details
+    </Button>
+  </View>
+  );
+}
+
+function DetailsScreen() {
+  const navigation = useNavigation();
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor : '#D7EC39' }}>
+    <Text>Details Screen</Text>
+    <Button onPress={() => navigation.goBack()}>Go back</Button>
+  </View>
+  );
+}
+
+function RootStack() {
+  return (
+    <Stack.Navigator
+  initialRouteName="Home"
+  screenOptions={{
+    headerStyle: { backgroundColor: 'white' },
+  }}
+>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+    </Stack.Navigator>
+  );
+}
+
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    //backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: '#D7EC39'
   };
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
   const safePadding = '5%';
 
   return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <Text style={styles.test}>Some More Text</Text>
-      <Text style={styles.testThree}>Some More Text</Text>
-      <Text style={styles.testTwo}>Some More Text</Text>
-      <ScrollView style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header />
-        </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
+    <NavigationContainer>
+      <RootStack />
+    </NavigationContainer>
   );
 }
 
@@ -128,9 +135,10 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
-  test: {
-    color: 'white',
+  headerFont: {
+    color: 'black',
     fontSize: 40,
+    fontWeight : 500,
     fontFamily: 'Geist-Regular',
   },
   testTwo: {
