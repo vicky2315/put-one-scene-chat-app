@@ -4,11 +4,18 @@
  *
  * @format
  */
-
-import React from 'react';
-import { Button } from '@react-navigation/elements';
-import { createStaticNavigation, NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import 'react-native-url-polyfill/auto';
+import React, {useEffect, useState} from 'react';
+import {Button} from '@react-navigation/elements';
+import {
+  createStaticNavigation,
+  NavigationContainer,
+  useNavigation,
+} from '@react-navigation/native';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import type {PropsWithChildren} from 'react';
 import {
   ScrollView,
@@ -26,6 +33,14 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import supabase from './services/supabaseClient';
+
+type UserTest = {
+  id: number;
+  username: string;
+  qr_code: string;
+  created_at: string;
+};
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -60,19 +75,43 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 const Stack = createNativeStackNavigator();
 
 function HomeScreen() {
+  const [user, setUser] = useState<UserTest | undefined>();
+  useEffect(() => {
+    // Query all users from the "users" table
+    const fetchData = async () => {
+      try {
+        const {data, error} = await supabase.from('user').select('*'); // Fetch all columns
+        if (error) {
+          console.error('Error fetching users:', error);
+        } else {
+          console.log('Users Data:', data);
+          setUser(data[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching users', error);
+      }
+    };
+    fetchData();
+  }, []);
   const navigation = useNavigation();
 
   return (
-    <View style={{ flex: 1, 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    backgroundColor : '#D7EC39' }}>
-
-    <Text style = {styles.headerFont}>Put1Scene</Text>
-    <Button onPress={() => navigation.navigate('Details')}>
-      Go to Details
-    </Button>
-  </View>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#D7EC39',
+      }}>
+      <Text style={styles.headerFont}>Put1Scene</Text>
+      <Text>Name: {user?.username}</Text>
+      <Text>QR Code: {user?.qr_code}</Text>
+      <Text>Created At: {user?.created_at}</Text>
+      <Text>Id: {user?.id}</Text>
+      <Button onPress={() => navigation.navigate('Details')}>
+        Go to Details
+      </Button>
+    </View>
   );
 }
 
@@ -80,21 +119,26 @@ function DetailsScreen() {
   const navigation = useNavigation();
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor : '#D7EC39' }}>
-    <Text>Details Screen</Text>
-    <Button onPress={() => navigation.goBack()}>Go back</Button>
-  </View>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#D7EC39',
+      }}>
+      <Text>Details Screen</Text>
+      <Button onPress={() => navigation.goBack()}>Go back</Button>
+    </View>
   );
 }
 
 function RootStack() {
   return (
     <Stack.Navigator
-  initialRouteName="Home"
-  screenOptions={{
-    headerStyle: { backgroundColor: 'white' },
-  }}
->
+      initialRouteName="Home"
+      screenOptions={{
+        headerStyle: {backgroundColor: 'white'},
+      }}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Details" component={DetailsScreen} />
     </Stack.Navigator>
@@ -106,7 +150,7 @@ function App(): React.JSX.Element {
 
   const backgroundStyle = {
     //backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    backgroundColor: '#D7EC39'
+    backgroundColor: '#D7EC39',
   };
 
   const safePadding = '5%';
@@ -138,7 +182,7 @@ const styles = StyleSheet.create({
   headerFont: {
     color: 'black',
     fontSize: 40,
-    fontWeight : 500,
+    fontWeight: 500,
     fontFamily: 'Geist-Regular',
   },
   testTwo: {
