@@ -70,7 +70,8 @@ def enableProguardInReleaseBuilds = false
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
-Properties properties = new Properties()
+//Properties properties = new Properties()
+def properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 def ninjaPath = properties.getProperty('ninja.path')
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
@@ -82,7 +83,7 @@ android {
 
     namespace "com.putonescenechatapp"
     defaultConfig {
-        applicationId "com.putonescenechatapp"
+        applicationId "com.putonescenechata.pp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

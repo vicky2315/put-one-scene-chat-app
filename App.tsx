@@ -75,26 +75,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 const Stack = createNativeStackNavigator();
 
 function HomeScreen() {
-  const [user, setUser] = useState<UserTest | undefined>();
-  useEffect(() => {
-    // Query all users from the "users" table
-    const fetchData = async () => {
-      try {
-        const {data, error} = await supabase.from('user').select('*'); // Fetch all columns
-        if (error) {
-          console.error('Error fetching users:', error);
-        } else {
-          console.log('Users Data:', data);
-          setUser(data[0]);
-        }
-      } catch (error) {
-        console.error('Error fetching users', error);
-      }
-    };
-    fetchData();
-  }, []);
   const navigation = useNavigation();
-
   return (
     <View
       style={{
@@ -104,10 +85,6 @@ function HomeScreen() {
         backgroundColor: '#D7EC39',
       }}>
       <Text style={styles.headerFont}>Put1Scene</Text>
-      <Text>Name: {user?.username}</Text>
-      <Text>QR Code: {user?.qr_code}</Text>
-      <Text>Created At: {user?.created_at}</Text>
-      <Text>Id: {user?.id}</Text>
       <Button onPress={() => navigation.navigate('Details')}>
         Go to Details
       </Button>
