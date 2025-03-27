@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -5,49 +6,21 @@
  * @format
  */
 import 'react-native-url-polyfill/auto';
-import React, {useEffect, useState} from 'react';
+
 import {Button} from '@react-navigation/elements';
-import {
-  createStaticNavigation,
-  NavigationContainer,
-  useNavigation,
-} from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import supabase from './services/supabaseClient';
-
-type UserTest = {
-  id: number;
-  username: string;
-  qr_code: string;
-  created_at: string;
-};
+import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {HomeScreen} from './screens/HomeScreen';
+import {SignUpScreen} from './screens/SignUpScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
 function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  //const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -74,41 +47,6 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen() {
-  const navigation = useNavigation();
-  return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#D7EC39',
-      }}>
-      <Text style={styles.headerFont}>Put1Scene</Text>
-      <Button onPress={() => navigation.navigate('Details')}>
-        Go to Details
-      </Button>
-    </View>
-  );
-}
-
-function DetailsScreen() {
-  const navigation = useNavigation();
-
-  return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#D7EC39',
-      }}>
-      <Text>Details Screen</Text>
-      <Button onPress={() => navigation.goBack()}>Go back</Button>
-    </View>
-  );
-}
-
 function RootStack() {
   return (
     <Stack.Navigator
@@ -117,13 +55,13 @@ function RootStack() {
         headerStyle: {backgroundColor: 'white'},
       }}>
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="Sign-Up" component={SignUpScreen} />
     </Stack.Navigator>
   );
 }
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  //const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     //backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,

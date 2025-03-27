@@ -2,6 +2,9 @@
 #
 .DS_Store
 
+# gradle.properties
+android\gradle.properties
+
 # env file
 .env
 
