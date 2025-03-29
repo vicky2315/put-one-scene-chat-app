@@ -7,6 +7,9 @@
  */
 import 'react-native-url-polyfill/auto';
 
+import "'./global.css'";
+import { GluestackUIProvider } from "@/'components/ui'/gluestack-ui-provider";
+
 import {Button} from '@react-navigation/elements';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -71,9 +74,9 @@ function App(): React.JSX.Element {
   const safePadding = '5%';
 
   return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
+    <GluestackUIProvider mode="light"><NavigationContainer>
+        <RootStack />
+      </NavigationContainer></GluestackUIProvider>
   );
 }
 
