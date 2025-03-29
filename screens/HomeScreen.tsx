@@ -1,6 +1,15 @@
-import {Button} from '@react-navigation/elements';
+//import {Button} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, View} from 'react-native';
+
+import { Button, ButtonText } from "@/components/ui/button"
+import {
+  useToast,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+} from "@/components/ui/toast"
+import React from "react"
 
 export function HomeScreen() {
   const navigation = useNavigation();
@@ -15,8 +24,44 @@ export function HomeScreen() {
       }}>
       <Text style={styles.headerFont}>Put1Scene</Text>
       <Button onPress={() => navigation.navigate('Sign-Up')}>Sign Up</Button>
+      <Example></Example>
     </View>
   );
+}
+
+export function Example() {
+  const toast = useToast()
+  const [toastId, setToastId] = React.useState("")
+  const handleToast = () => {
+    if (!toast.isActive(toastId)) {
+      showNewToast()
+    }
+  }
+  const showNewToast = () => {
+    const newId = Math.random()
+    setToastId(newId + "")
+    toast.show({
+      id: newId+"",
+      placement: "top",
+      duration: 3000,
+      render: ({ id }) => {
+        const uniqueToastId = "toast-" + id
+        return (
+          <Toast nativeID={uniqueToastId} action="muted" variant="solid">
+            <ToastTitle>Hello!</ToastTitle>
+            <ToastDescription>
+              This is a customized toast message.
+            </ToastDescription>
+          </Toast>
+        )
+      },
+    })
+  }
+  return (
+    <Button onPress={handleToast}>
+      <ButtonText>Press Me</ButtonText>
+    </Button>
+  )
 }
 
 const styles = StyleSheet.create({

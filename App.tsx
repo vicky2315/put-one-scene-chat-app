@@ -7,16 +7,17 @@
  */
 import 'react-native-url-polyfill/auto';
 
-import "'./global.css'";
-import { GluestackUIProvider } from "@/'components/ui'/gluestack-ui-provider";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import './global.css';
 
-import {Button} from '@react-navigation/elements';
+//import {Button} from '@react-navigation/elements';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import type {PropsWithChildren} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {HomeScreen} from './screens/HomeScreen';
 import {SignUpScreen} from './screens/SignUpScreen';
+
 
 type SectionProps = PropsWithChildren<{
   title: string;
