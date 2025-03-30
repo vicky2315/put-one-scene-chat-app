@@ -2,14 +2,14 @@
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, View} from 'react-native';
 
-import { Button, ButtonText } from "@/components/ui/button"
+import {Button, ButtonText} from '@/components/ui/button';
 import {
   useToast,
   Toast,
   ToastTitle,
   ToastDescription,
-} from "@/components/ui/toast"
-import React from "react"
+} from '@/components/ui/toast';
+import React from 'react';
 
 export function HomeScreen() {
   const navigation = useNavigation();
@@ -23,29 +23,30 @@ export function HomeScreen() {
         backgroundColor: '#D7EC39',
       }}>
       <Text style={styles.headerFont}>Put1Scene</Text>
-      <Button onPress={() => navigation.navigate('Sign-Up')}>Sign Up</Button>
-      <Example></Example>
+      <Button onPress={() => navigation.navigate('Sign-Up')}>
+        <ButtonText>Sign Up</ButtonText>
+      </Button>
     </View>
   );
 }
 
 export function Example() {
-  const toast = useToast()
-  const [toastId, setToastId] = React.useState("")
+  const toast = useToast();
+  const [toastId, setToastId] = React.useState('');
   const handleToast = () => {
     if (!toast.isActive(toastId)) {
-      showNewToast()
+      showNewToast();
     }
-  }
+  };
   const showNewToast = () => {
-    const newId = Math.random()
-    setToastId(newId + "")
+    const newId = Math.random();
+    setToastId(newId + '');
     toast.show({
-      id: newId+"",
-      placement: "top",
+      id: newId + '',
+      placement: 'top',
       duration: 3000,
-      render: ({ id }) => {
-        const uniqueToastId = "toast-" + id
+      render: ({id}) => {
+        const uniqueToastId = 'toast-' + id;
         return (
           <Toast nativeID={uniqueToastId} action="muted" variant="solid">
             <ToastTitle>Hello!</ToastTitle>
@@ -53,15 +54,15 @@ export function Example() {
               This is a customized toast message.
             </ToastDescription>
           </Toast>
-        )
+        );
       },
-    })
-  }
+    });
+  };
   return (
     <Button onPress={handleToast}>
       <ButtonText>Press Me</ButtonText>
     </Button>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
