@@ -1,6 +1,7 @@
 import {Button} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
 import {Text, View} from 'react-native';
+import SvgLogo from '../assets/images/test.svg';
 
 export function SignUpScreen() {
   const navigation = useNavigation();
@@ -23,6 +24,7 @@ export function SignUpScreen() {
         }}>
         Sign Up
       </Text>
+      <SvgLogo width={150} height={150} />
       <Button onPress={() => navigation.goBack()}>Go back</Button>
     </View>
   );
