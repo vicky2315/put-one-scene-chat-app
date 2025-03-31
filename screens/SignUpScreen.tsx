@@ -24,7 +24,10 @@ export function SignUpScreen() {
         }}>
         Sign Up
       </Text>
-      <Button onPress={() => navigation.goBack()}>Go back</Button>
+      <SvgLogo width={200} height={200} />
+      <Button onPress={() => navigation.navigate('GenerateQR')}>
+        <ButtonText>Sign Up/Generate QR</ButtonText>
+      </Button>
     </View>
   );
 }
