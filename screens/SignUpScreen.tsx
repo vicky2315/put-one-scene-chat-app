@@ -1,4 +1,4 @@
-import {Button} from '@react-navigation/elements';
+import {Button, ButtonText} from '@/components/ui/button';
 import {useNavigation} from '@react-navigation/native';
 import {Text, View} from 'react-native';
 
@@ -23,7 +23,9 @@ export function SignUpScreen() {
         }}>
         Sign Up
       </Text>
-      <Button onPress={() => navigation.goBack()}>Go back</Button>
+      <Button onPress={() => navigation.navigate('GenerateQR')}>
+        <ButtonText>Sign Up/Generate QR</ButtonText>
+      </Button>
     </View>
   );
 }

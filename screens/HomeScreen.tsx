@@ -1,6 +1,6 @@
 //import {Button} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {Button, ButtonText} from '@/components/ui/button';
 import {
@@ -30,41 +30,6 @@ export function HomeScreen() {
   );
 }
 
-export function Example() {
-  const toast = useToast();
-  const [toastId, setToastId] = React.useState('');
-  const handleToast = () => {
-    if (!toast.isActive(toastId)) {
-      showNewToast();
-    }
-  };
-  const showNewToast = () => {
-    const newId = Math.random();
-    setToastId(newId + '');
-    toast.show({
-      id: newId + '',
-      placement: 'top',
-      duration: 3000,
-      render: ({id}) => {
-        const uniqueToastId = 'toast-' + id;
-        return (
-          <Toast nativeID={uniqueToastId} action="muted" variant="solid">
-            <ToastTitle>Hello!</ToastTitle>
-            <ToastDescription>
-              This is a customized toast message.
-            </ToastDescription>
-          </Toast>
-        );
-      },
-    });
-  };
-  return (
-    <Button onPress={handleToast}>
-      <ButtonText>Press Me</ButtonText>
-    </Button>
-  );
-}
-
 const styles = StyleSheet.create({
   headerFont: {
     color: 'black',
@@ -73,3 +38,38 @@ const styles = StyleSheet.create({
     fontFamily: 'Geist-Regular',
   },
 });
+
+// export function Example() {
+//   const toast = useToast();
+//   const [toastId, setToastId] = React.useState('');
+//   const handleToast = () => {
+//     if (!toast.isActive(toastId)) {
+//       showNewToast();
+//     }
+//   };
+//   const showNewToast = () => {
+//     const newId = Math.random();
+//     setToastId(newId + '');
+//     toast.show({
+//       id: newId + '',
+//       placement: 'top',
+//       duration: 3000,
+//       render: ({id}) => {
+//         const uniqueToastId = 'toast-' + id;
+//         return (
+//           <Toast nativeID={uniqueToastId} action="muted" variant="solid">
+//             <ToastTitle>Hello!</ToastTitle>
+//             <ToastDescription>
+//               This is a customized toast message.
+//             </ToastDescription>
+//           </Toast>
+//         );
+//       },
+//     });
+//   };
+//   return (
+//     <Button onPress={handleToast}>
+//       <ButtonText>Press Me</ButtonText>
+//     </Button>
+//   );
+// }

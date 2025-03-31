@@ -7,7 +7,7 @@
  */
 import 'react-native-url-polyfill/auto';
 
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import {GluestackUIProvider} from '@/components/ui/gluestack-ui-provider';
 import './global.css';
 
 //import {Button} from '@react-navigation/elements';
@@ -17,7 +17,7 @@ import type {PropsWithChildren} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {HomeScreen} from './screens/HomeScreen';
 import {SignUpScreen} from './screens/SignUpScreen';
-
+import {GenerateQR} from './screens/GenerateQR';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -60,6 +60,7 @@ function RootStack() {
       }}>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Sign-Up" component={SignUpScreen} />
+      <Stack.Screen name="GenerateQR" component={GenerateQR} />
     </Stack.Navigator>
   );
 }
@@ -75,9 +76,11 @@ function App(): React.JSX.Element {
   const safePadding = '5%';
 
   return (
-    <GluestackUIProvider mode="light"><NavigationContainer>
+    <GluestackUIProvider mode="light">
+      <NavigationContainer>
         <RootStack />
-      </NavigationContainer></GluestackUIProvider>
+      </NavigationContainer>
+    </GluestackUIProvider>
   );
 }
 
