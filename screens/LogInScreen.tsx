@@ -10,18 +10,28 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from '@/components/ui/form-control';
-import {AlertCircleIcon} from '@/components/ui/icon';
-import {Input, InputField} from '@/components/ui/input';
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import {EyeIcon, EyeOffIcon} from '@/components/ui/icon';
+import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input';
+import React, {useState} from 'react';
+//import {useNavigation} from '@react-navigation/native';
 import {Text, View} from 'react-native';
 
-export function SignUpScreen() {
-  const navigation = useNavigation();
+export function LogInScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleState = () => {
+    setShowPassword(showState => {
+      return !showState;
+    });
+  };
+  function handleLogIn(): void {
+    console.log(email, password);
+  }
 
+  //const navigation = useNavigation();
   return (
     <View
-      // eslint-disable-next-line react-native/no-inline-styles
       style={{
         flex: 1,
         alignItems: 'center',
@@ -47,46 +57,52 @@ export function SignUpScreen() {
             fontWeight: '500',
             fontFamily: 'Geist-Regular',
             color: 'black',
+            marginBottom: 12,
           }}>
-          Sign Up
+          Log In
         </Text>
         <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Username</FormControlLabelText>
-          </FormControlLabel>
-          <Input style={{marginBottom: 10}}>
-            <InputField size="lg" />
-          </Input>
           <FormControlLabel>
             <FormControlLabelText>Email</FormControlLabelText>
           </FormControlLabel>
           <Input style={{marginBottom: 10}}>
-            <InputField size="lg" />
+            <InputField
+              size="lg"
+              id="email"
+              type="text"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
           </Input>
           <FormControlLabel>
             <FormControlLabelText>Password</FormControlLabelText>
           </FormControlLabel>
           <Input style={{marginBottom: 10}}>
-            <InputField size="lg" type="password" />
-          </Input>
-          <FormControlLabel>
-            <FormControlLabelText>Re-enter Password</FormControlLabelText>
-          </FormControlLabel>
-          <Input style={{marginBottom: 10}}>
-            <InputField size="lg" type="password" />
+            <InputField
+              size="lg"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              value={password}
+              onChangeText={setPassword}
+            />
+            <InputSlot
+              className="pr-3"
+              style={{marginRight: 8}}
+              onPress={handleState}>
+              <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+            </InputSlot>
           </Input>
           <FormControlHelper>
             <FormControlHelperText />
           </FormControlHelper>
           <FormControlError>
-            <FormControlErrorIcon as={AlertCircleIcon} />
-            <FormControlErrorText>
-              Atleast 6 characters are required.
-            </FormControlErrorText>
+            <FormControlErrorIcon />
+            <FormControlErrorText />
           </FormControlError>
         </FormControl>
-        <Button onPress={() => navigation.navigate('GenerateQR')}>
-          <ButtonText>Sign Up/Generate QR</ButtonText>
+        <Button onPress={handleLogIn}>
+          <ButtonText>Log In</ButtonText>
         </Button>
       </View>
     </View>

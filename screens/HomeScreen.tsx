@@ -1,7 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 //import {Button} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
+import SvgLogo from '../assets/images/test.svg';
 import {Button, ButtonText} from '@/components/ui/button';
 import {
   useToast,
@@ -15,17 +16,38 @@ export function HomeScreen() {
   const navigation = useNavigation();
   return (
     <View
-      // eslint-disable-next-line react-native/no-inline-styles
       style={{
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#D7EC39',
       }}>
-      <Text style={styles.headerFont}>Put1Scene</Text>
-      <Button onPress={() => navigation.navigate('Sign-Up')}>
-        <ButtonText>Sign Up</ButtonText>
-      </Button>
+      <View
+        style={{
+          backgroundColor: 'white',
+          padding: 20,
+          borderRadius: 10,
+          width: '80%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+        }}>
+        <Text style={styles.headerFont}>Put1Scene</Text>
+        <SvgLogo width={200} height={200} />
+        <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
+          <Button onPress={() => navigation.navigate('Log In')}>
+            <ButtonText>Log In</ButtonText>
+          </Button>
+          <Button onPress={() => navigation.navigate('Sign-Up')}>
+            <ButtonText>Sign Up</ButtonText>
+          </Button>
+        </View>
+      </View>
     </View>
   );
 }

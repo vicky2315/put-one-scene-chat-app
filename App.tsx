@@ -18,6 +18,7 @@ import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {HomeScreen} from './screens/HomeScreen';
 import {SignUpScreen} from './screens/SignUpScreen';
 import {GenerateQR} from './screens/GenerateQR';
+import {LogInScreen} from './screens/LogInScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -61,6 +62,7 @@ function RootStack() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Sign-Up" component={SignUpScreen} />
       <Stack.Screen name="GenerateQR" component={GenerateQR} />
+      <Stack.Screen name="Log In" component={LogInScreen} />
     </Stack.Navigator>
   );
 }
