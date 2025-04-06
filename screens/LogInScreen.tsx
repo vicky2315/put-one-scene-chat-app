@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Button, ButtonText} from '@/components/ui/button';
+import {Button, ButtonSpinner, ButtonText} from '@/components/ui/button';
 import {
   FormControl,
   FormControlError,
@@ -12,11 +12,13 @@ import {
 } from '@/components/ui/form-control';
 import {EyeIcon, EyeOffIcon} from '@/components/ui/icon';
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input';
+import {logInUser} from '@/services/supabaseServices';
 import React, {useState} from 'react';
 //import {useNavigation} from '@react-navigation/native';
 import {Text, View} from 'react-native';
 
 export function LogInScreen() {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = React.useState(false);
@@ -25,8 +27,12 @@ export function LogInScreen() {
       return !showState;
     });
   };
-  function handleLogIn(): void {
-    console.log(email, password);
+
+  async function handleLogIn(): Promise<void> {
+    setLoading(true);
+    const data = await logInUser(email, password);
+    console.log(data);
+    setLoading(false);
   }
 
   //const navigation = useNavigation();
@@ -102,7 +108,16 @@ export function LogInScreen() {
           </FormControlError>
         </FormControl>
         <Button onPress={handleLogIn}>
-          <ButtonText>Log In</ButtonText>
+          {loading ? (
+            <>
+              <ButtonSpinner color={'white'} />
+              <ButtonText className="font-medium text-sm ml-2">
+                Please wait...
+              </ButtonText>
+            </>
+          ) : (
+            <ButtonText>Log In</ButtonText>
+          )}
         </Button>
       </View>
     </View>

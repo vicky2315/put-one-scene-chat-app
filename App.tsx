@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
@@ -13,12 +14,14 @@ import './global.css';
 //import {Button} from '@react-navigation/elements';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import type {PropsWithChildren} from 'react';
+import {useEffect, useState, type PropsWithChildren} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {HomeScreen} from './screens/HomeScreen';
 import {SignUpScreen} from './screens/SignUpScreen';
 import {GenerateQR} from './screens/GenerateQR';
 import {LogInScreen} from './screens/LogInScreen';
+import supabase from './services/supabaseClient';
+import {ChatsScreen} from './screens/ChatsScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -53,16 +56,36 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
+  const [session, setSession] = useState(null);
+  useEffect(() => {
+    // Get session on load
+    supabase.auth.getSession().then(({data: {session}}) => setSession(session));
+
+    // Listen for session changes
+    const {data: listener} = supabase.auth.onAuthStateChange(
+      (_event, session) => setSession(session),
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerStyle: {backgroundColor: 'white'},
       }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Sign-Up" component={SignUpScreen} />
-      <Stack.Screen name="GenerateQR" component={GenerateQR} />
-      <Stack.Screen name="Log In" component={LogInScreen} />
+      {session ? (
+        <>
+          <Stack.Screen name="Chats" component={ChatsScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Sign-Up" component={SignUpScreen} />
+          <Stack.Screen name="GenerateQR" component={GenerateQR} />
+          <Stack.Screen name="Log In" component={LogInScreen} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }
