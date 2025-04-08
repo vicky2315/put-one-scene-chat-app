@@ -30,8 +30,8 @@ export const logInUser = async (email: string, password: string) => {
     password,
   });
   if (error) {
-    console.error('Error Logging In:', error.message);
-    return null;
+    console.log('Error Logging In:', error.message);
+    return error;
   }
   return data;
 };

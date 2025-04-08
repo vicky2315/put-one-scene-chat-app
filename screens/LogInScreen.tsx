@@ -5,12 +5,10 @@ import {
   FormControlError,
   FormControlErrorIcon,
   FormControlErrorText,
-  FormControlHelper,
-  FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
 } from '@/components/ui/form-control';
-import {EyeIcon, EyeOffIcon} from '@/components/ui/icon';
+import {AlertCircleIcon, EyeIcon, EyeOffIcon} from '@/components/ui/icon';
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input';
 import {logInUser} from '@/services/supabaseServices';
 import React, {useState} from 'react';
@@ -21,7 +19,8 @@ export function LogInScreen() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState({message: '', isInvalid: false});
   const togglePasswordVisibility = () => {
     setShowPassword(showState => {
       return !showState;
@@ -30,8 +29,14 @@ export function LogInScreen() {
 
   async function handleLogIn(): Promise<void> {
     setLoading(true);
+    setError({message: '', isInvalid: false});
     const data = await logInUser(email, password);
-    console.log(data);
+
+    if (data instanceof Error) {
+      console.log(data.message);
+      setError({message: data.message, isInvalid: true});
+    }
+
     setLoading(false);
   }
 
@@ -67,7 +72,7 @@ export function LogInScreen() {
           }}>
           Log In
         </Text>
-        <FormControl>
+        <FormControl isInvalid={error.isInvalid}>
           <FormControlLabel>
             <FormControlLabelText>Email</FormControlLabelText>
           </FormControlLabel>
@@ -99,15 +104,12 @@ export function LogInScreen() {
               <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
             </InputSlot>
           </Input>
-          <FormControlHelper>
-            <FormControlHelperText />
-          </FormControlHelper>
           <FormControlError>
-            <FormControlErrorIcon />
-            <FormControlErrorText />
+            <FormControlErrorIcon as={AlertCircleIcon} />
+            <FormControlErrorText>{error.message}</FormControlErrorText>
           </FormControlError>
         </FormControl>
-        <Button onPress={handleLogIn}>
+        <Button onPress={handleLogIn} style={{marginTop: 10}}>
           {loading ? (
             <>
               <ButtonSpinner color={'white'} />

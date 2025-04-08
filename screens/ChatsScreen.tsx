@@ -1,4 +1,3 @@
-/* eslint-disable react/self-closing-comp */
 import {Button, ButtonText} from '@/components/ui/button';
 import supabase from '@/services/supabaseClient';
 import {Alert, StyleSheet, Text, View} from 'react-native';
