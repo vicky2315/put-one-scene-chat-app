@@ -22,7 +22,7 @@ export function LogInScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = React.useState(false);
-  const handleState = () => {
+  const togglePasswordVisibility = () => {
     setShowPassword(showState => {
       return !showState;
     });
@@ -95,7 +95,7 @@ export function LogInScreen() {
             <InputSlot
               className="pr-3"
               style={{marginRight: 8}}
-              onPress={handleState}>
+              onPress={togglePasswordVisibility}>
               <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
             </InputSlot>
           </Input>
