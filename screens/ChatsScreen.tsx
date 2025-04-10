@@ -1,6 +1,9 @@
 import {Button, ButtonText} from '@/components/ui/button';
 import supabase from '@/services/supabaseClient';
-import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Alert, ScrollView, StyleSheet, Text, View, Pressable} from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 export function ChatsScreen() {
   const chats = [
@@ -28,10 +31,16 @@ export function ChatsScreen() {
         contentContainerStyle={styles.chatListContent}
       >
         {chats.map(chat => (
-          <View key={chat.id} style={styles.chatItem}>
+        <Pressable 
+           key={chat.id} 
+           onPress={() => console.log('Chat tapped:', chat.id)}
+           android_ripple={{ color: '#D6E50022' }}
+         >
+          <View style={styles.chatItem}>
             <Text style={styles.chatName}>{chat.name}</Text>
             <Text style={styles.chatMessage}>{chat.lastMessage}</Text>
           </View>
+          </Pressable>
         ))}
         </ScrollView>
 
