@@ -21,7 +21,8 @@ import {SignUpScreen} from './screens/SignUpScreen';
 import {GenerateQR} from './screens/GenerateQR';
 import {LogInScreen} from './screens/LogInScreen';
 import supabase from './services/supabaseClient';
-import {ChatsScreen} from './screens/ChatsScreen';
+import {ChatsScreen} from './screens/ChatsTab';
+import {LandingScreen} from './screens/LandingScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -76,7 +77,11 @@ function RootStack() {
       }}>
       {session ? (
         <>
-          <Stack.Screen name="Chats" component={ChatsScreen} />
+          <Stack.Screen
+            name="Landing"
+            component={LandingScreen}
+            options={{headerShown: false}}
+          />
         </>
       ) : (
         <>

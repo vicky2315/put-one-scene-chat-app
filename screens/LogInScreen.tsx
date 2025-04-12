@@ -47,7 +47,7 @@ export function LogInScreen() {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#D7EC39',
+        backgroundColor: '#D6E500',
       }}>
       <View
         style={{

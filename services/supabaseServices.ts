@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import supabase from './supabaseClient';
 
 export const insertUser = async (userData: {
@@ -35,3 +36,10 @@ export const logInUser = async (email: string, password: string) => {
   }
   return data;
 };
+
+export async function handleLogout(): Promise<void> {
+  const {error} = await supabase.auth.signOut();
+  if (error) {
+    Alert.alert('Error logging out', error.message);
+  }
+}
