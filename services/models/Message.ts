@@ -1,0 +1,13 @@
+import { Model } from '@nozbe/watermelondb';  // Fixed package name
+import { field, children, relation } from '@nozbe/watermelondb/decorators'; 
+
+export default class Message extends Model {
+  static table = 'messages';
+
+  @field('content') content!: string;
+  @field('sender_id') senderId!: string;
+  @field('status') status!: 'sent' | 'delivered' | 'read';
+  @field('created_at') createdAt!: Date;
+
+  @relation('chats', 'chat_id') chat!: any; // We'll type this properly later
+}

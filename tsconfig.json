@@ -1,9 +1,12 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "paths": {
       "@/*": [
-        "./*"
+        "src/*"
       ],
       "tailwind.config": [
         "./tailwind.config.js"
