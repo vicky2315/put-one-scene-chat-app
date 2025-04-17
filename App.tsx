@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 /**
@@ -23,6 +24,7 @@ import {LogInScreen} from './screens/LogInScreen';
 import supabase from './services/supabaseClient';
 import {LandingScreen} from './screens/LandingScreen';
 import SpinnerScreen from './components/InHouse/SpinnerScreen';
+import MessagingScreen from 'screens/MessagingScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -85,6 +87,11 @@ function RootStack() {
             <Stack.Screen
               name="Landing"
               component={LandingScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="User"
+              component={MessagingScreen}
               options={{headerShown: false}}
             />
           </>

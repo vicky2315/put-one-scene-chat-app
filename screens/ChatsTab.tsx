@@ -1,9 +1,16 @@
 import {ChatDisplayProps, ChatItem} from '../components/InHouse/ChatItem';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import withObservables from '@nozbe/with-observables';
-import { observeChats, observeMessages } from '../services/messageService';
+import {observeChats, observeMessages} from '../services/messageService';
+import {useNavigation, NavigationProp} from '@react-navigation/native';
+
+export type RootStackParamList = {
+  Landing: undefined;
+  User: {user: string}; // 👈 define expected params here
+};
 
 export function ChatsTab() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const chats = [
     {id: 1, name: 'Rowdy Ranga', lastMessage: 'Baro ache loude'},
     {id: 2, name: 'Long Lokesh', lastMessage: 'Dum hakana ba'},
@@ -22,6 +29,7 @@ export function ChatsTab() {
               name={chat.name}
               lastMessage={chat.lastMessage}
               key={chat.id}
+              onPress={() => navigation.navigate('User', {user: chat.name})}
             />
           ))}
         </ScrollView>
@@ -30,7 +38,7 @@ export function ChatsTab() {
   );
 }
 
-const EnhancedChatsTab = withObservables([], ( ) => ({
+const EnhancedChatsTab = withObservables([], () => ({
   chats: observeChats(), // Now using real data from WatermelonDB
 }))(ChatsTab);
 

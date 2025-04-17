@@ -4,14 +4,23 @@ export type ChatDisplayProps = {
   id: number;
   name: string;
   lastMessage: string;
+  onPress?: () => void;
 };
 export const ChatItem = (chat: ChatDisplayProps) => {
+  const handlePress = () => {
+    if (chat.onPress) {
+      chat.onPress();
+    } else {
+      console.log('Chat tapped:', chat.id);
+    }
+  };
+
   return (
     <View style={styles.wrapper}>
       <Pressable
         key={chat.id}
         style={styles.chatItem}
-        onPress={() => console.log('Chat tapped:', chat.id)}
+        onPress={handlePress}
         android_ripple={{color: '#D6E50022'}}>
         <Text style={styles.chatName}>{chat.name}</Text>
         <Text style={styles.chatMessage}>{chat.lastMessage}</Text>
