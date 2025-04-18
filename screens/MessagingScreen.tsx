@@ -4,6 +4,10 @@ import {RootStackParamList} from './ChatsTab';
 import {Input, InputField} from 'components/ui/input';
 import {useState} from 'react';
 import {Button, ButtonText} from 'components/ui/button';
+import { sendMessage } from 'services/messageService';
+import Message from 'services/models/Message';
+import { database } from 'services/database';
+import Chat from 'services/models/Chat';
 
 type UserScreenRouteProp = RouteProp<RootStackParamList, 'User'>;
 
@@ -13,7 +17,24 @@ function MessagingScreen() {
   const route = useRoute<UserScreenRouteProp>();
   const {user} = route.params;
 
-  function handleSend() {
+  async function handleSend() {
+    await database.write(async () => {
+      // Clear existing data
+      const messages = await database.get('messages').query().fetch();
+      await database.unsafeResetDatabase();
+
+        const chat4 = await database.get<Chat>('chats').create(chat => {
+          chat.name = 'Rowdy Ranga';
+          chat.lastMessage = messagesText;
+        });
+          await database.get<Message>('messages').create(message => {
+          message.chat.set(chat4);
+          message.content = messagesText;
+          message.senderId = 'user1';
+        });
+      })
+    //sendMessage('1' , messagesText)
+    console.log("Writing to db");
     setMessagesArray(prev => (prev ? [...prev, messagesText] : [messagesText]));
     setMessagesText('');
   }

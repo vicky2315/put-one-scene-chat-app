@@ -15,7 +15,7 @@ import './global.css';
 //import {Button} from '@react-navigation/elements';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useEffect, useState, type PropsWithChildren} from 'react';
+import React, {useEffect, useState, type PropsWithChildren} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {HomeScreen} from './screens/HomeScreen';
 import {SignUpScreen} from './screens/SignUpScreen';
@@ -25,6 +25,10 @@ import supabase from './services/supabaseClient';
 import {LandingScreen} from './screens/LandingScreen';
 import SpinnerScreen from './components/InHouse/SpinnerScreen';
 import MessagingScreen from 'screens/MessagingScreen';
+import { database } from './services/database';
+import { DatabaseProvider } from '@nozbe/watermelondb/react';
+import Chat from 'services/models/Chat';
+import Message from 'services/models/Message';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -62,6 +66,9 @@ function RootStack() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    if (__DEV__) {
+      seedMockData();
+    }
     setLoading(true);
     // Get session on load
     supabase.auth.getSession().then(({data: {session}}) => setSession(session));
@@ -118,8 +125,47 @@ function RootStack() {
   );
 }
 
+export async function seedMockData() {
+  await database.write(async () => {
+    // Clear existing data
+    const messages = await database.get('messages').query().fetch();
+    console.log('All messages:', messages.map(m => m._raw));
+    //await database.unsafeResetDatabase();
+
+    // Create mock chats
+    const chat1 = await database.get<Chat>('chats').create(chat => {
+      chat.name = 'Rowdy Ranga';
+      chat.lastMessage = 'Baro ache loude';
+    });
+
+    const chat2 = await database.get<Chat>('chats').create(chat => {
+      chat.name = 'Long Lokesh';
+      chat.lastMessage = 'Dum hakana ba';
+    });
+
+    // Add sample messages
+    await database.get<Message>('messages').create(message => {
+      message.chat.set(chat1);
+      message.content = 'Baro ache loude';
+      message.senderId = 'user1';
+    });
+
+    await database.get<Message>('messages').create(message => {
+      message.chat.set(chat2);
+      message.content = 'Dum hakana ba';
+      message.senderId = 'user2';
+
+
+    });
+  });
+}
+
 function App(): React.JSX.Element {
   //const isDarkMode = useColorScheme() === 'dark';
+
+
+// Check all messages
+
 
   const backgroundStyle = {
     //backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -129,11 +175,13 @@ function App(): React.JSX.Element {
   const safePadding = '5%';
 
   return (
+    <DatabaseProvider database={database}>
     <GluestackUIProvider mode="light">
       <NavigationContainer>
         <RootStack />
       </NavigationContainer>
     </GluestackUIProvider>
+    </DatabaseProvider>
   );
 }
 
