@@ -2,12 +2,14 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 export type ChatDisplayProps = {
   id: number;
+  senderId: string;
   name: string;
   lastMessage: string;
   onPress?: () => void;
 };
 export const ChatItem = (chat: ChatDisplayProps) => {
   const handlePress = () => {
+    //console.log('chat', chat);
     if (chat.onPress) {
       chat.onPress();
     } else {

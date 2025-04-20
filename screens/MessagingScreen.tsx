@@ -1,13 +1,15 @@
+/* eslint-disable react-native/no-inline-styles */
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from './ChatsTab';
-import {Input, InputField} from 'components/ui/input';
-import {useState} from 'react';
-import {Button, ButtonText} from 'components/ui/button';
-import { sendMessage } from 'services/messageService';
+import {Input, InputField, InputIcon, InputSlot} from 'components/ui/input';
+import {useEffect, useState} from 'react';
+//import {Button, ButtonText} from 'components/ui/button';
+import {observeMessages, sendMessage} from 'services/messageService';
 import Message from 'services/models/Message';
-import { database } from 'services/database';
+import {database} from 'services/database';
 import Chat from 'services/models/Chat';
+import {SendHorizontal} from 'lucide-react-native';
 
 type UserScreenRouteProp = RouteProp<RootStackParamList, 'User'>;
 
@@ -16,25 +18,37 @@ function MessagingScreen() {
   const [messagesArray, setMessagesArray] = useState<string[]>([]);
   const route = useRoute<UserScreenRouteProp>();
   const {user} = route.params;
+  const {senderId} = route.params;
+
+  useEffect(() => {
+    console.log('sender_id', senderId);
+    const subscription = observeMessages(senderId).subscribe(messages => {
+      console.log('messages from useEffect', messages);
+      setMessagesArray(messages.map(message => message.content));
+    });
+
+    return () => subscription.unsubscribe(); // Cleanup subscription on unmount
+  }, [senderId]);
 
   async function handleSend() {
     await database.write(async () => {
       // Clear existing data
       const messages = await database.get('messages').query().fetch();
-      await database.unsafeResetDatabase();
+      //await database.unsafeResetDatabase();
 
-        const chat4 = await database.get<Chat>('chats').create(chat => {
-          chat.name = 'Rowdy Ranga';
-          chat.lastMessage = messagesText;
-        });
-          await database.get<Message>('messages').create(message => {
-          message.chat.set(chat4);
-          message.content = messagesText;
-          message.senderId = 'user1';
-        });
-      })
-    //sendMessage('1' , messagesText)
-    console.log("Writing to db");
+      const chat4 = await database.get<Chat>('chats').create(chat => {
+        chat.name = user;
+        chat.lastMessage = messagesText;
+      });
+      await database.get<Message>('messages').create(message => {
+        message.chat.set(chat4);
+        message.content = messagesText;
+        message.senderId = senderId;
+      });
+    });
+
+    //await sendMessage(senderId, messagesText);
+    console.log('Writing to db');
     setMessagesArray(prev => (prev ? [...prev, messagesText] : [messagesText]));
     setMessagesText('');
   }
@@ -42,26 +56,40 @@ function MessagingScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>{user}</Text>
 
-      {messagesArray?.map((message: string, index: number) => (
-        <View style={styles.bubbleWrapper}>
-          <View style={styles.bubble}>
-            <Text style={styles.bubbleText} key={index}>
-              {message}
-            </Text>
+      {messagesArray
+        ?.slice()
+        .reverse()
+        .map((message: string, index: number) => (
+          <View style={styles.bubbleWrapper}>
+            <View style={styles.bubble}>
+              <Text style={styles.bubbleText} key={index}>
+                {message}
+              </Text>
+            </View>
           </View>
-        </View>
-      ))}
+        ))}
 
-      <Input>
+      <Input variant="rounded" style={{height: 46}}>
         <InputField
           placeholder="Send a Message..."
           value={messagesText}
           onChangeText={setMessagesText}
         />
+        <InputSlot
+          onPress={handleSend}
+          style={{
+            marginRight: 10,
+            borderRadius: 80,
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+          <InputIcon
+            as={SendHorizontal}
+            style={{marginRight: 8, width: 38, height: 38}}
+            size="xl"
+          />
+        </InputSlot>
       </Input>
-      <Button onPress={handleSend}>
-        <ButtonText>Send</ButtonText>
-      </Button>
     </View>
   );
 }

@@ -6,15 +6,30 @@ import {useNavigation, NavigationProp} from '@react-navigation/native';
 
 export type RootStackParamList = {
   Landing: undefined;
-  User: {user: string}; // 👈 define expected params here
+  User: {user: string; senderId: string}; // 👈 define expected params here
 };
 
 export function ChatsTab() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const chats = [
-    {id: 1, name: 'Rowdy Ranga', lastMessage: 'Baro ache loude'},
-    {id: 2, name: 'Long Lokesh', lastMessage: 'Dum hakana ba'},
-    {id: 3, name: 'Mass Mahesh', lastMessage: 'D-Boss ki jai'},
+    {
+      id: 1,
+      senderId: 'user1',
+      name: 'Rowdy Ranga',
+      lastMessage: 'Baro ache loude',
+    },
+    {
+      id: 2,
+      senderId: 'user2',
+      name: 'Long Lokesh',
+      lastMessage: 'Dum hakana ba',
+    },
+    {
+      id: 3,
+      senderId: 'user3',
+      name: 'Mass Mahesh',
+      lastMessage: 'D-Boss ki jai',
+    },
   ];
 
   return (
@@ -29,7 +44,13 @@ export function ChatsTab() {
               name={chat.name}
               lastMessage={chat.lastMessage}
               key={chat.id}
-              onPress={() => navigation.navigate('User', {user: chat.name})}
+              onPress={() =>
+                navigation.navigate('User', {
+                  user: chat.name,
+                  senderId: chat.senderId,
+                })
+              }
+              senderId={chat.senderId}
             />
           ))}
         </ScrollView>

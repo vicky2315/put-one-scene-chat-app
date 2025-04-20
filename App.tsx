@@ -25,8 +25,8 @@ import supabase from './services/supabaseClient';
 import {LandingScreen} from './screens/LandingScreen';
 import SpinnerScreen from './components/InHouse/SpinnerScreen';
 import MessagingScreen from 'screens/MessagingScreen';
-import { database } from './services/database';
-import { DatabaseProvider } from '@nozbe/watermelondb/react';
+import {database} from './services/database';
+import {DatabaseProvider} from '@nozbe/watermelondb/react';
 import Chat from 'services/models/Chat';
 import Message from 'services/models/Message';
 
@@ -129,7 +129,10 @@ export async function seedMockData() {
   await database.write(async () => {
     // Clear existing data
     const messages = await database.get('messages').query().fetch();
-    console.log('All messages:', messages.map(m => m._raw));
+    console.log(
+      'All messages:',
+      messages.map(m => m._raw),
+    );
     //await database.unsafeResetDatabase();
 
     // Create mock chats
@@ -154,8 +157,6 @@ export async function seedMockData() {
       message.chat.set(chat2);
       message.content = 'Dum hakana ba';
       message.senderId = 'user2';
-
-
     });
   });
 }
@@ -163,9 +164,7 @@ export async function seedMockData() {
 function App(): React.JSX.Element {
   //const isDarkMode = useColorScheme() === 'dark';
 
-
-// Check all messages
-
+  // Check all messages
 
   const backgroundStyle = {
     //backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -176,11 +175,11 @@ function App(): React.JSX.Element {
 
   return (
     <DatabaseProvider database={database}>
-    <GluestackUIProvider mode="light">
-      <NavigationContainer>
-        <RootStack />
-      </NavigationContainer>
-    </GluestackUIProvider>
+      <GluestackUIProvider mode="light">
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </GluestackUIProvider>
     </DatabaseProvider>
   );
 }
