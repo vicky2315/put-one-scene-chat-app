@@ -163,6 +163,20 @@ export async function seedMockData() {
 
 function App(): React.JSX.Element {
   //const isDarkMode = useColorScheme() === 'dark';
+  const roomOne = supabase.channel('room-one');
+  roomOne
+    .on('broadcast', {event: 'test'}, data => {
+      console.log('message received', data);
+    })
+    .subscribe(status => {
+      if (status === 'SUBSCRIBED') {
+        roomOne.send({
+          type: 'broadcast',
+          event: 'test',
+          payload: {message: 'received', user},
+        });
+      }
+    });
 
   // Check all messages
 

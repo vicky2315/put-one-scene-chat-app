@@ -64,19 +64,19 @@ function MessagingScreen() {
 
     console.log('from handleSend2');
 
-    roomOne
-      .on('broadcast', {event: 'test'}, data => {
-        console.log('message received', data);
-      })
-      .subscribe(status => {
-        if (status === 'SUBSCRIBED') {
-          roomOne.send({
-            type: 'broadcast',
-            event: 'test',
-            payload: {message: 'received', user},
-          });
-        }
-      });
+    // roomOne
+    //   .on('broadcast', {event: 'test'}, data => {
+    //     console.log('message received', data);
+    //   })
+    //   .subscribe(status => {
+    //     if (status === 'SUBSCRIBED') {
+    //       roomOne.send({
+    //         type: 'broadcast',
+    //         event: 'test',
+    //         payload: {message: 'received', user},
+    //       });
+    //     }
+    //   });
   }
   return (
     <View style={styles.container}>
