@@ -10,6 +10,8 @@ import Message from 'services/models/Message';
 import {database} from 'services/database';
 import Chat from 'services/models/Chat';
 import {SendHorizontal} from 'lucide-react-native';
+import supabase from 'services/supabaseClient';
+import {Button} from '@react-navigation/elements';
 
 type UserScreenRouteProp = RouteProp<RootStackParamList, 'User'>;
 
@@ -19,7 +21,7 @@ function MessagingScreen() {
   const route = useRoute<UserScreenRouteProp>();
   const {user} = route.params;
   const {senderId} = route.params;
-
+  const roomOne = supabase.channel('room-one');
   useEffect(() => {
     console.log('sender_id', senderId);
     const subscription = observeMessages(senderId).subscribe(messages => {
@@ -34,7 +36,7 @@ function MessagingScreen() {
     await database.write(async () => {
       // Clear existing data
       const messages = await database.get('messages').query().fetch();
-      //await database.unsafeResetDatabase();
+      await database.unsafeResetDatabase();
 
       const chat4 = await database.get<Chat>('chats').create(chat => {
         chat.name = user;
@@ -51,6 +53,30 @@ function MessagingScreen() {
     console.log('Writing to db');
     setMessagesArray(prev => (prev ? [...prev, messagesText] : [messagesText]));
     setMessagesText('');
+  }
+
+  async function handleSend2() {
+    roomOne.send({
+      type: 'broadcast',
+      event: 'test',
+      payload: {message: 'test message', user},
+    });
+
+    console.log('from handleSend2');
+
+    roomOne
+      .on('broadcast', {event: 'test'}, data => {
+        console.log('message received', data);
+      })
+      .subscribe(status => {
+        if (status === 'SUBSCRIBED') {
+          roomOne.send({
+            type: 'broadcast',
+            event: 'test',
+            payload: {message: 'received', user},
+          });
+        }
+      });
   }
   return (
     <View style={styles.container}>
@@ -90,6 +116,7 @@ function MessagingScreen() {
           />
         </InputSlot>
       </Input>
+      <Button onPressIn={handleSend2}>Test Message</Button>
     </View>
   );
 }
