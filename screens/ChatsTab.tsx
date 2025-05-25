@@ -1,12 +1,19 @@
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable jsx-quotes */
 import {ChatDisplayProps, ChatItem} from '../components/InHouse/ChatItem';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import withObservables from '@nozbe/with-observables';
 import {observeChats, observeMessages} from '../services/messageService';
 import {useNavigation, NavigationProp} from '@react-navigation/native';
+import {Fab, FabIcon, FabLabel} from 'components/ui/fab';
+import {Box} from '@/components/ui/box';
+import {AddIcon} from 'components/ui/icon';
 
 export type RootStackParamList = {
   Landing: undefined;
   User: {user: string; senderId: string}; // 👈 define expected params here
+  Profile: undefined;
+  Contacts: undefined;
 };
 
 export function ChatsTab() {
@@ -32,6 +39,8 @@ export function ChatsTab() {
     },
   ];
 
+  const handleContactsNav = () => navigation.navigate('Contacts');
+
   return (
     <>
       <View style={styles.container}>
@@ -55,6 +64,19 @@ export function ChatsTab() {
           ))}
         </ScrollView>
       </View>
+      <Box className="h-[360px] w-80 bg-background-neon rounded-md">
+        <Pressable onPress={handleContactsNav}>
+          <Fab
+            size="lg"
+            placement="bottom right"
+            isHovered={false}
+            isDisabled={false}
+            isPressed={false}>
+            <FabIcon as={AddIcon} />
+            <FabLabel>New Chat</FabLabel>
+          </Fab>
+        </Pressable>
+      </Box>
     </>
   );
 }

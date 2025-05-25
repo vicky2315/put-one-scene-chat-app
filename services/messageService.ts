@@ -32,25 +32,25 @@ export const sendMessage = async (senderId: string, content: string) => {
   });
 
   try {
-    const { error } = await supabase.from('messages').insert({
+    const {error} = await supabase.from('messages').insert({
       //id: localMessage.id,
       //chat_id: chatId,
       sender_id: senderId,
       content: content,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     });
     await database.write(async () => {
       await localMessage.update(() => {
         localMessage.status = error ? 'failed' : 'delivered';
       });
     });
-    } catch (error) {
+  } catch (error) {
     await database.write(async () => {
       await localMessage.update(() => {
         localMessage.status = 'failed';
       });
     });
-   }
+  }
 };
 
 export const observeChats = () => {
@@ -69,7 +69,10 @@ export const observeChats = () => {
     );
 };
 
-export const subscribeToMessages = (chatId: string, callback: (message: Message) => void) => {
+export const subscribeToMessages = (
+  chatId: string,
+  callback: (message: Message) => void,
+) => {
   return supabase
     .channel(`messages:${chatId}`)
     .on(
@@ -78,26 +81,29 @@ export const subscribeToMessages = (chatId: string, callback: (message: Message)
         event: 'INSERT',
         schema: 'public',
         table: 'messages',
-        filter: `chat_id=eq.${chatId}`
+        filter: `chat_id=eq.${chatId}`,
       },
-      async (payload) => {
+      async payload => {
         // Check if message already exists locally
-        const existing = await database.get<Message>('messages')
+        const existing = await database
+          .get<Message>('messages')
           .find(payload.new.id);
-          
+
         if (!existing) {
           await database.write(async () => {
-            const message = await database.get<Message>('messages').create(msg => {
-              msg.content = payload.new.content;
-              msg.senderId = payload.new.sender_id;
-              msg.status = 'delivered';
-              msg.createdAt = new Date(payload.new.created_at);
-              msg.chat.id = payload.new.chat_id;
-            });
+            const message = await database
+              .get<Message>('messages')
+              .create(msg => {
+                msg.content = payload.new.content;
+                msg.senderId = payload.new.sender_id;
+                msg.status = 'delivered';
+                msg.createdAt = new Date(payload.new.created_at);
+                msg.chat.id = payload.new.chat_id;
+              });
             callback(message);
           });
         }
-      }
+      },
     )
     .subscribe();
 };

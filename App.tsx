@@ -29,6 +29,8 @@ import {database} from './services/database';
 import {DatabaseProvider} from '@nozbe/watermelondb/react';
 import Chat from 'services/models/Chat';
 import Message from 'services/models/Message';
+import ProfileScreen from 'screens/ProfileScreen';
+import ContactsScreen from 'screens/ContactsScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -99,6 +101,16 @@ function RootStack() {
             <Stack.Screen
               name="User"
               component={MessagingScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Profile"
+              component={ProfileScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Contacts"
+              component={ContactsScreen}
               options={{headerShown: false}}
             />
           </>

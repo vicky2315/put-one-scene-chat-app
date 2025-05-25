@@ -1,7 +1,8 @@
+/* eslint-disable quotes */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {ChatsTab} from './ChatsTab';
+import {ChatsTab, RootStackParamList} from './ChatsTab';
 import {GroupsTab} from './GroupsTab';
 import {Icon} from '@/components/ui/icon';
 import {
@@ -23,12 +24,18 @@ import {
 } from '@/components/ui/actionsheet';
 import {useState} from 'react';
 import {handleLogout} from '@/services/supabaseServices';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import ContactsTab from './ContactsScreen';
 
 export function LandingScreen() {
   const Tab = createBottomTabNavigator();
   const [showActionsheet, setShowActionsheet] = useState(false);
   const handleClose = () => setShowActionsheet(false);
-
+  const handleProfilePageNav = () => {
+    navigation.navigate('Profile');
+    handleClose();
+  };
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <>
       <Actionsheet isOpen={showActionsheet} onClose={handleClose}>
@@ -38,7 +45,7 @@ export function LandingScreen() {
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
-          <ActionsheetItem onPress={handleClose}>
+          <ActionsheetItem onPress={handleProfilePageNav}>
             <ActionsheetItemText>Profile</ActionsheetItemText>
           </ActionsheetItem>
           <ActionsheetItem onPress={handleClose}>

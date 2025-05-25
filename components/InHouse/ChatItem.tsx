@@ -1,3 +1,8 @@
+import {Avatar, AvatarBadge, AvatarFallbackText} from 'components/ui/avatar';
+import {Heading} from 'components/ui/heading';
+import {HStack} from 'components/ui/hstack';
+import {VStack} from 'components/ui/vstack';
+import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 export type ChatDisplayProps = {
@@ -24,8 +29,18 @@ export const ChatItem = (chat: ChatDisplayProps) => {
         style={styles.chatItem}
         onPress={handlePress}
         android_ripple={{color: '#D6E50022'}}>
-        <Text style={styles.chatName}>{chat.name}</Text>
-        <Text style={styles.chatMessage}>{chat.lastMessage}</Text>
+        <HStack space="2xl">
+          <Avatar className="bg-indigo-400 border-black">
+            <AvatarFallbackText className="text-white">
+              {chat.name}
+            </AvatarFallbackText>
+            {/* <AvatarBadge /> */}
+          </Avatar>
+          <VStack space="xs">
+            <Heading style={styles.chatName}>{chat.name}</Heading>
+            <Text style={styles.chatMessage}>{chat.lastMessage}</Text>
+          </VStack>
+        </HStack>
       </Pressable>
     </View>
   );
@@ -45,7 +60,7 @@ const styles = StyleSheet.create({
     color: '#D6E500',
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: -1,
   },
   chatMessage: {
     color: '#FFFFFF',
